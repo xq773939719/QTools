@@ -1,0 +1,22 @@
+{
+  "name": "QTools",
+  "version": "0.1.0",
+  "summary": "A short description of QTools.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/xq773939719/QTools",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "xq773939719": "773939719@qq.com"
+  },
+  "source": {
+    "git": "https://github.com/xq773939719/QTools.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "9.0"
+  },
+  "source_files": "QTools/Classes/**/*"
+}

@@ -1,0 +1,6 @@
+framework module QTools {
+  umbrella header "QTools-umbrella.h"
+
+  export *
+  module * { export * }
+}

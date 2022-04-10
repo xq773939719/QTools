@@ -1,0 +1,6 @@
+use_frameworks!
+target 'QTools_Tests' do
+  pod 'QTools', :path => '../'
+  
+  
+end
