@@ -18,6 +18,8 @@
 @property (nonatomic, strong) NSWindowController *rootWindowController;
 #endif
 
+@property (nonatomic, weak) APPLICATION *application;
+
 @property (nonatomic, strong) WINDOW *window;
 
 @property (nonatomic, strong) VIEW_CONTROLLER *rootViewController;
@@ -37,15 +39,16 @@
 }
 
 - (void)launchWithApplication:(APPLICATION *)application{
+    self.application = application;
 #if TARGET_OS_IPHONE
     self.window = [[UIWindow alloc] initWithFrame: [UIScreen mainScreen].bounds];
     application.window = self.window;
 #endif
 #if TARGET_OS_OSX
     NSRect frame = CGRectZero;
-    NSUInteger style = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskResizable | NSWindowStyleMaskFullSizeContentView;
+    NSUInteger style = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskResizable | NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskFullSizeContentView;
     NSWindow *window = [[NSWindow alloc] initWithContentRect:frame styleMask:style backing:NSBackingStoreBuffered defer:YES];
-    [self setCurrentWindow:window];
+    self.window = window;
 #endif
     [self initNavigation];
     [self registerModules];
@@ -127,6 +130,7 @@
 }
 
 - (void)onAppDidBecomeActive {
+    [self setCurrentWindow:self.window];
     [[BaseModuleManager share] onAppDidBecomeActive];
 }
 

@@ -19,6 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign, readonly, class) Class routeManagerClass;
 
+// APP
+@property (nonatomic, weak, readonly) APPLICATION *application;
+
 // 视窗
 @property (nonatomic, strong, readonly) WINDOW *window;
 

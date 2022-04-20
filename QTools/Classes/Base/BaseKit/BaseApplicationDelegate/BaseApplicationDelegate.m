@@ -18,7 +18,7 @@
 
 # pragma mark - BaseApplicationEntranceProtocol
 - (BaseEntranceManager *)onDelegateInit {
-        // 子类需要实现
+    // 子类需要实现
     return nil;
 }
 
@@ -77,7 +77,7 @@
     [self.entranceManager onAppWillEnterForeground];
 }
 
-- (void)applicationWillBecomeActive:(NSNotification *)notification {
+- (void)applicationDidBecomeActive:(NSNotification *)notification {
     LoggerInfo(@"[%@] -> %@", [self class], @"已经激活");
     [self.entranceManager onAppDidBecomeActive];
 }
@@ -87,7 +87,7 @@
     [self.entranceManager onAppWillResignActive];
 }
 
-- (void)applicationWillHide:(NSNotification *)notification {
+- (void)applicationDidHide:(NSNotification *)notification {
     LoggerInfo(@"[%@] -> %@", [self class], @"已经进入后台");
     [self.entranceManager onAppDidEnterBackground];
 }
@@ -95,6 +95,13 @@
 - (void)applicationWillTerminate:(NSNotification *)notification {
     LoggerInfo(@"[%@] -> %@", [self class], @"已经终止");
     [self.entranceManager onAppWillTerminate];
+}
+
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag {
+    if (!flag) {
+        [self applicationDidBecomeActive:sender];
+    }
+    return YES;
 }
 
 #endif

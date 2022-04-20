@@ -21,14 +21,6 @@
     return instance;
 }
 
-- (NSSize)windowWillResize:(NSWindow *)sender toSize:(NSSize)frameSize {
-    return frameSize;
-}
-
-- (void)windowDidResize:(NSNotification *)notification {
-    
-}
-
 @end
 
 #endif
