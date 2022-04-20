@@ -18,13 +18,23 @@
 @property (nonatomic, strong) NSWindowController *rootWindowController;
 #endif
 
+@property (nonatomic, strong) WINDOW *window;
+
+@property (nonatomic, strong) VIEW_CONTROLLER *rootViewController;
+
+@property (nonatomic, strong) RouteManager *routeManager;
+
 @end
 
 @implementation BaseEntranceManager
 
-@synthesize window = _window;
-@synthesize rootViewController = _rootViewController;
-@synthesize routeManager = _routeManager;
++ (Class)rootViewControllerClass {
+    return [VIEW_CONTROLLER class];
+}
+
++ (Class)routeManagerClass {
+    return [RouteManager class];
+}
 
 - (void)launchWithApplication:(APPLICATION *)application{
 #if TARGET_OS_IPHONE
@@ -34,7 +44,8 @@
 #if TARGET_OS_OSX
     NSRect frame = CGRectZero;
     NSUInteger style = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskResizable | NSWindowStyleMaskFullSizeContentView;
-    self.window = [[NSWindow alloc] initWithContentRect:frame styleMask:style backing:NSBackingStoreNonretained defer:YES];
+    NSWindow *window = [[NSWindow alloc] initWithContentRect:frame styleMask:style backing:NSBackingStoreBuffered defer:YES];
+    [self setCurrentWindow:window];
 #endif
     [self initNavigation];
     [self registerModules];
@@ -42,24 +53,49 @@
     [self registerViewControllers];
 }
 
+#if TARGET_OS_OSX
+- (void)setCurrentWindow:(NSWindow *)window {
+    self.window = window;
+    [window center];
+    [window makeKeyWindow];
+    self.rootWindowController.window = window;
+    [self.rootWindowController showWindow:nil];
+}
+#endif
+
 - (void)initNavigation {
     
 #if TARGET_OS_IPHONE
-    self.rootNavigationController = [[BaseNavigationController alloc] initWithRootViewController:[self rootViewController]];
+    self.rootNavigationController = [[BaseNavigationController alloc] initWithRootViewController:self.rootViewController];
     [[Router share] configRootNavigationController:self.rootNavigationController];
 #endif
     
 #if TARGET_OS_OSX
-    self.rootWindowController = [NSWindowController new];
-    self.rootWindowController.window = self.window;
     [[Router share] configRootWindowController:self.rootWindowController];
+    self.rootWindowController.window = self.window;
+    [self.rootWindowController showWindow:nil];
 #endif
-    
 }
 
+#if TARGET_OS_OSX
+
+- (NSWindowController *)rootWindowController {
+    if (_rootWindowController) {
+        return _rootWindowController;
+    }
+    _rootWindowController = [NSWindowController new];
+    return _rootWindowController;
+}
+
+#endif
+
+
 - (VIEW_CONTROLLER *)rootViewController {
-    NSAssert(NO, @"子类未实现该方法");
-    return nil;
+    if (_rootViewController) {
+        return _rootViewController;
+    }
+    _rootViewController = [[self class].rootViewControllerClass new];
+    return _rootViewController;
 }
 
 - (void)registerModules {
@@ -75,7 +111,15 @@
 }
 
 - (void)registerViewControllers {
-    
+    [self.routeManager registerViewControllers];
+}
+
+- (RouteManager *)routeManager {
+    if (_routeManager) {
+        return _routeManager;
+    }
+    _routeManager = [[self class].routeManagerClass new];
+    return _routeManager;
 }
 
 - (void)onAppLaunch {

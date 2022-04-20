@@ -12,6 +12,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol ViewProtocol <NSObject>
 
+#if TARGET_OS_OSX
+/// 不使用xib方式需要补充View
++ (CGSize) viewSize;
+#endif
+
 - (void)addSubview:(VIEW *)view;
 
 @end
@@ -46,6 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface BaseViewController : VIEW_CONTROLLER <ViewProtocol, RoutableProtocol, LogicProtocol, ViewModelProtocol>
 
+@property (nonatomic, weak) BaseEntranceManager *entranceManager;
 @property (nonatomic, strong, readonly) VIEW *rootContainer;
 @property (nonatomic, strong, readonly) NSMutableArray<ViewModel *> *viewModels;
 

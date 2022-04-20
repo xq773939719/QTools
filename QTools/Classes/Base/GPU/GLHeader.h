@@ -14,4 +14,14 @@
 
 #endif
 
+#if TARGET_OS_OSX
+
+#define GL_SILENCE_DEPRECATION
+
+#import <OpenGL/gl.h>
+#import <OpenGL/glu.h>
+#import <GLUT/glut.h>
+
+#endif
+
 #endif /* GLHeader_h */

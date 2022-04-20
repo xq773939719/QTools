@@ -29,6 +29,10 @@
 
 #pragma mark - ViewProtocol
 
++ (CGSize)viewSize {
+    return CGSizeMake(800, 600);
+}
+
 - (void)addSubview:(VIEW *)view {
     [self.rootContainer addSubview:view];
 }
@@ -77,7 +81,11 @@
 }
 
 - (void)loadView {
-    [super loadView];
+#if TARGET_OS_OSX
+    CGSize size = [[self class] viewSize];
+    CGRect rect = CGRectMake(0, 0, size.width, size.height);
+    self.view = [[VIEW alloc] initWithFrame:rect];
+#endif
 }
 
 - (void)viewDidLoad {
