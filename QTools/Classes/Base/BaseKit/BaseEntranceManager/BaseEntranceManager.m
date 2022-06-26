@@ -130,7 +130,11 @@
 }
 
 - (void)onAppDidBecomeActive {
-    [self setCurrentWindow:self.window];
+#if TARGET_OS_OSX
+    if (!self.window.isVisible) {
+        [self setCurrentWindow:self.window];
+    }
+#endif
     [[BaseModuleManager share] onAppDidBecomeActive];
 }
 
