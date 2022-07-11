@@ -80,13 +80,13 @@
     return self;
 }
 
-- (void)loadView {
 #if TARGET_OS_OSX
+- (void)loadView {
     CGSize size = [[self class] viewSize];
     CGRect rect = CGRectMake(0, 0, size.width, size.height);
     self.view = [[VIEW alloc] initWithFrame:rect];
-#endif
 }
+#endif
 
 - (void)viewDidLoad {
     [super viewDidLoad];
