@@ -49,7 +49,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface BaseViewController : VIEW_CONTROLLER <ViewProtocol, RoutableProtocol, LogicProtocol, ViewModelProtocol>
+@interface BaseViewController : VIEW_CONTROLLER <
+ViewProtocol,
+RoutableProtocol,
+LogicProtocol,
+ViewModelProtocol
+>
 
 @property (nonatomic, weak) BaseEntranceManager *entranceManager;
 @property (nonatomic, strong, readonly) VIEW *rootContainer;
