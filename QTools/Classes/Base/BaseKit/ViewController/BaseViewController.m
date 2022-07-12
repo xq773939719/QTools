@@ -12,6 +12,7 @@
 
 @interface BaseViewController ()
 
+@property (nonatomic, strong) ViewControllerContext *context;
 @property (nonatomic, strong) VIEW *rootContainer;
 @property (nonatomic, strong) NSMutableArray<ViewModel *> *viewModels;
 
@@ -25,6 +26,12 @@
         return;
     }
     [[Router share] registerScheme:[self scheme] withClass:[self class]];
+}
+
+- (ViewControllerContext *)context {
+    if (_context) return _context;
+    _context = [ViewControllerContext new];
+    return _context;
 }
 
 #pragma mark - ViewProtocol

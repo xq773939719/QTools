@@ -9,6 +9,13 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class ViewModel;
+@class ViewControllerContext;
+
+@protocol ContextProtocol <NSObject>
+
+@property (nonatomic, strong, readonly) ViewControllerContext *context;
+
+@end
 
 @protocol ViewProtocol <NSObject>
 
@@ -50,6 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface BaseViewController : VIEW_CONTROLLER <
+ContextProtocol,
 ViewProtocol,
 RoutableProtocol,
 LogicProtocol,
@@ -57,7 +65,12 @@ ViewModelProtocol
 >
 
 @property (nonatomic, weak) BaseEntranceManager *entranceManager;
+
+/// VC上下文
+@property (nonatomic, strong, readonly) ViewControllerContext *context;
+/// VC容器
 @property (nonatomic, strong, readonly) VIEW *rootContainer;
+/// 绑定的VM
 @property (nonatomic, strong, readonly) NSMutableArray<ViewModel *> *viewModels;
 
 @end

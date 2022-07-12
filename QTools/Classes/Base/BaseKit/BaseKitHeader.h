@@ -23,6 +23,7 @@
 #import "LaunchViewController.h"
 
 // 基类
+#import "ViewControllerContext.h"
 #import "BaseViewController.h"
 #import "BaseNavigationController.h"
 #import "BaseTabBarController.h"
