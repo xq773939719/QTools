@@ -260,7 +260,7 @@
 }
 
 - (void)loadData:(void (^)(BOOL))callback {
-    
+    callback(YES);
 }
 
 - (void)updateViews {
