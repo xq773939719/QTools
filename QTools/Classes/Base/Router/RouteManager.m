@@ -5,11 +5,12 @@
 //
 
 #import "RouteManager.h"
+#import "Router.h"
 
 @implementation RouteManager
 
 - (void)registerViewControllers {
-  
+    [[Router share] registerScheme:@"" withClass:[VIEW_CONTROLLER class]];
 }
 
 @end

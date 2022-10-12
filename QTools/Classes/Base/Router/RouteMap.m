@@ -18,8 +18,7 @@ static NSString *PREFIX_ROUTE = @"q://";
 
 @implementation RouteMap
 
-- (instancetype)init
-{
+- (instancetype)init {
     self = [super init];
     if (self) {
         self.lock = [NSLock new];
@@ -31,7 +30,7 @@ static NSString *PREFIX_ROUTE = @"q://";
 - (BOOL)registerScheme:(NSString *)scheme withClass:(Class)className {
     [self.lock lock];
     
-    if (![scheme hasPrefix:PREFIX_ROUTE]) {
+    if (!scheme || (scheme.length > 0 && ![scheme hasPrefix:PREFIX_ROUTE])) {
         LoggerError(@"非法路由前缀路由");
         return NO;
     }
