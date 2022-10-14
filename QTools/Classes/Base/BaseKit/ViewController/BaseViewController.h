@@ -43,6 +43,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setupData;
 /// 初始化逻辑子视图
 - (void)setupViews;
+/// 布局逻辑子视图
+- (void)layoutViews;
 /// 数据逻辑请求
 - (void)loadData:(void (^)(BOOL))callback;
 /// 视图逻辑更新

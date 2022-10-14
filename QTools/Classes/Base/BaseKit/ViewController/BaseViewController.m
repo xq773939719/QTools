@@ -12,6 +12,8 @@
 
 @interface BaseViewController ()
 
+/// 首次与进入
+@property (nonatomic, assign) BOOL first;
 @property (nonatomic, strong) ViewControllerContext *context;
 @property (nonatomic, strong) VIEW *rootContainer;
 @property (nonatomic, strong) NSMutableArray<ViewModel *> *viewModels;
@@ -114,8 +116,13 @@
     self.navigationController.navigationBar.hidden = hideNavigationBar;
     self.tabBarController.tabBar.hidden = hideTabBar;
     
+    if (!self.first) {
+        return;
+    }
+    self.first = NO;
     [self setupData];
     [self setupViews];
+    [self layoutViews];
     [self loadData:^(BOOL success) {
         [self updateViews];
     }];
@@ -220,6 +227,7 @@
 #pragma mark - private method
 
 - (void)initProperties {
+    self.first = YES;
     self.viewControllerName = @"ViewControllerName";
     self.params = @{};
     
@@ -256,6 +264,10 @@
 }
 
 - (void)setupViews {
+    
+}
+
+- (void)layoutViews {
     
 }
 
