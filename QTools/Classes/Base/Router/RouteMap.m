@@ -11,7 +11,6 @@ static NSString *PREFIX_ROUTE = @"q://";
 
 @interface RouteMap ()
 
-@property (nonatomic, strong) NSLock *lock;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, Class> *routeMap;
 
 @end
@@ -21,37 +20,34 @@ static NSString *PREFIX_ROUTE = @"q://";
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.lock = [NSLock new];
         self.routeMap = [NSMutableDictionary dictionary];
     }
     return self;
 }
 
 - (BOOL)registerScheme:(NSString *)scheme withClass:(Class)className {
-    [self.lock lock];
-    
-    if (!scheme || (scheme.length > 0 && ![scheme hasPrefix:PREFIX_ROUTE])) {
-        LoggerError(@"非法路由前缀路由");
-        return NO;
+    @synchronized (self) {
+        if (!scheme || (scheme.length > 0 && ![scheme hasPrefix:PREFIX_ROUTE])) {
+            LoggerError(@"非法路由前缀路由");
+            return NO;
+        }
+        if ([self.routeMap objectForKey:scheme]) {
+            NSAssert(NO, @"不允许同名路由");
+            return NO;
+        }
+        
+        LoggerInfo(@"[%@] -> 注册scheme: %@, className: %@", [self class], scheme, className);
+        [self.routeMap setObject:className forKey:scheme];
     }
-    if ([self.routeMap objectForKey:scheme]) {
-        NSAssert(NO, @"不允许同名路由");
-        [self.lock unlock];
-        return NO;
-    }
-    
-    LoggerInfo(@"[%@] -> 注册scheme: %@, className: %@", [self class], scheme, className);
-    [self.routeMap setObject:className forKey:scheme];
-    [self.lock unlock];
     return YES;
 }
 
 - (Class)getClass:(NSString *)scheme {
     Class className = nil;
-    [self.lock lock];
-    className = [self.routeMap objectForKey:scheme];
-    [self.lock unlock];
-    LoggerInfo(@"[%@] -> 获取scheme: %@, className: %@", [self class], scheme, className);
+    @synchronized (self) {
+        className = [self.routeMap objectForKey:scheme];
+        LoggerInfo(@"[%@] -> 获取scheme: %@, className: %@", [self class], scheme, className);
+    }
     return className;
 }
 
